@@ -21,6 +21,7 @@ TIMER_DESTS := $(patsubst systemd/%.timer,/etc/systemd/system/%.timer,$(TIMER_SO
 
 .PHONY: install
 install: $(SCRIPT_DESTS) $(SERVICE_DESTS) $(TIMER_DESTS)
+	systemctl daemon-reload
 
 $(PREFIX)/etc/restic-backup-systemd/scripts/%: scripts/%
 	mkdir -p $(@D)
