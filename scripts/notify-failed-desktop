@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# notify-failed-desktop sends a desktop notification to a user if a backup job
+# failed.
+#
+# This script is intended to be called by notify-failed.
+
+: "${NOTIFY_USER:? NOTIFY_USER is required}"
+: "${SYSTEMD_UNIT_NAME:? SYSTEMD_UNIT_NAME is required}"
+
+set -eu -o pipefail
+
+if (($(id -u) != 0)); then
+    echo >&2 "Need to be root"
+    exit 1
+fi
+
+if ! command -v notify-send >/dev/null 2>&1; then
+    echo >&2 "Missing command notify-send"
+    exit 1
+fi
+
+NOTIFY_USER_UID="$(id -u fh)"
+DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$NOTIFY_USER_UID/bus"
+DISPLAY=:0
+
+sudo -u "$NOTIFY_USER" \
+    DBUS_SESSION_BUS_ADDRESS="$DBUS_SESSION_BUS_ADDRESS" \
+    DISPLAY="$DISPLAY" \
+    notify-send "$SYSTEMD_UNIT_NAME failed" "$(systemctl status --all "$SYSTEMD_UNIT_NAME")"

@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+: "${RESTIC_BACKUP_SYSTEMD_INSTANCES_DIR:=/usr/local/etc/restic-backup-systemd/instances}"
+
+set -eu -o pipefail
+
+# Name of the restic-backup-systemd systemd unit that failed.
+#
+# Format: <service-name>@<instance-name>.service
+SYSTEMD_UNIT_NAME="${1:-}"
+if [[ -z "${SYSTEMD_UNIT_NAME:-}" ]]; then
+    echo >&2 "SYSTEMD_UNIT_NAME was emtpy"
+    exit 1
+fi
+
+INSTANCE_NAME="${SYSTEMD_UNIT_NAME/#*@/}"
+INSTANCE_NAME="${INSTANCE_NAME/%.service/}"
+INSTANCE_DIR="$RESTIC_BACKUP_SYSTEMD_INSTANCES_DIR/$INSTANCE_NAME"
+
+if [[ ! -d "$INSTANCE_DIR" ]]; then
+    echo >&2 "Instance directory not found: $INSTANCE_DIR"
+    exit 1
+fi
+
+NOTIFICATIONS_DIR="$INSTANCE_DIR/notify.d"
+
+set -o allexport
+# shellcheck disable=SC1091
+source "$INSTANCE_DIR/env"
+set +o allexport
+
+export SYSTEMD_UNIT_NAME
+if [[ -d "$NOTIFICATIONS_DIR" ]]; then
+    for n in "$NOTIFICATIONS_DIR"/*; do
+        if [[ -x "$n" ]]; then
+            "$n" || true
+        fi
+    done
+fi

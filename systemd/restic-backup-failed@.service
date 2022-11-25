@@ -1,0 +1,14 @@
+[Unit]
+Description=Send one or more notifications that %I failed
+
+[Service]
+Type=oneshot
+Environment="RESTIC_BACKUP_SYSTEMD_INSTANCES_DIR=__PREFIX__/etc/restic-backup-systemd/instances"
+
+# Use the home directory of the restic user configured above.
+WorkingDirectory=~
+
+ExecStart=__PREFIX__/etc/restic-backup-systemd/scripts/notify-failed %i
+
+[Install]
+WantedBy=multi-user.target
