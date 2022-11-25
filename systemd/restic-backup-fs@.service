@@ -1,0 +1,43 @@
+# The restic-backup-fs@.service allows to backup arbitrary locations on the
+# host file system.
+#
+# The unit is templated, which allows is it to be used with separate named
+# configs. After installing the unit the following files need to be created
+# in the `__PREFIX__/etc/restic-backup-systemd/instances/<instance-name>`
+# directory.
+#
+#    - `env`: containing any environment variables required to configure restic.
+#      This file must include the environment variables to configure the restic
+#      repository location and the password for it.
+#      See: https://restic.readthedocs.io/en/stable/040_backup.html#environment-variables
+#
+#    - `files`: containing a list of patterns matching files and directories
+#      to back up. The file is passed to restic's --files-from option.
+#      See: https://restic.readthedocs.io/en/stable/040_backup.html#including-files
+
+[Unit]
+Description=Backup the file system using the configuration in __PREFIX__/etc/restic-backup-systemd/instances/%I
+
+ConditionFileNotEmpty=__PREFIX__/etc/restic-backup-systemd/instances/%I/env
+ConditionFileNotEmpty=__PREFIX__/etc/restic-backup-systemd/instances/%I/files
+ConditionFileIsExecutable=__PREFIX__/etc/restic-backup-systemd/scripts/check-snapshots
+
+[Service]
+Type=oneshot
+User=__RESTIC_USER__
+Group=__RESTIC_GROUP__
+EnvironmentFile=__PREFIX__/etc/restic-backup-systemd/instances/%I/env
+AmbientCapabilities=CAP_DAC_READ_SEARCH
+
+# Use the home directory of the restic user configured above.
+WorkingDirectory=~
+
+ExecCondition=__PREFIX__/etc/restic-backup-systemd/scripts/check-snapshots
+ExecStart=/usr/bin/env restic backup \
+    --verbose \
+    --exclude-caches \
+    --tag %N \
+    --files-from __PREFIX__/etc/restic-backup-systemd/instances/%I/files
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -u -o pipefail
+
+# Check if the restic repository configured using environment variables is
+# reachable and initialized.
+/usr/bin/env restic snapshots >/dev/null 2>&1
+ec=$?
+
+# If restic returned a zero exit code everything is fine and we are done.
+if ((ec == 0)); then
+    exit 0
+fi
+
+# Otherwise print some information and exit with whatever exit code restic
+# returned.
+echo >&2 "Failed to list snapshots of restic repository."
+echo >&2 "Is the repository location reachable and initialized?"
+
+exit $ec
