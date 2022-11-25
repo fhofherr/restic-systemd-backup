@@ -1,0 +1,10 @@
+[Unit]
+Description=Run restic-backup-forget@%I.service in regular intervals
+
+[Timer]
+RandomizedDelaySec=15min
+OnBootSec=1h15min
+OnUnitActiveSec=1day
+
+[Install]
+WantedBy=timers.target

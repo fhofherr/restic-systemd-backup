@@ -1,0 +1,42 @@
+# The restic-backup-forget@.service removes old backups according to a policy.
+#
+# The unit is templated, which allows is it to be used with separate named
+# configs. After installing the unit the following files need to be created
+# in the `__PREFIX__/etc/restic-backup-systemd/instances/<instance-name>`
+# directory.
+#
+#    - `env`: containing any environment variables required to configure restic.
+#      This file must include the environment variables to configure the restic
+#      repository location and the password for it.
+#      See: https://restic.readthedocs.io/en/stable/040_backup.html#environment-variables
+
+[Unit]
+Description=Remove old backups using the configuration in __PREFIX__/etc/restic-backup-systemd/instances/%I
+
+ConditionFileNotEmpty=__PREFIX__/etc/restic-backup-systemd/instances/%I/env
+ConditionFileIsExecutable=__PREFIX__/etc/restic-backup-systemd/scripts/check-snapshots
+
+[Service]
+Type=oneshot
+User=__RESTIC_USER__
+Group=__RESTIC_GROUP__
+EnvironmentFile=__PREFIX__/etc/restic-backup-systemd/instances/%I/env
+AmbientCapabilities=CAP_DAC_READ_SEARCH
+
+# Use the home directory of the restic user configured above.
+WorkingDirectory=~
+
+ExecCondition=__PREFIX__/etc/restic-backup-systemd/scripts/check-snapshots
+ExecStart=/usr/bin/env restic forget \
+    --prune \
+    --verbose \
+    --keep-hourly 48 \
+    --keep-daily 7 \
+    --keep-weekly 5 \
+    --keep-monthly 12 \
+    --keep-yearly 5
+
+ExecStartPost=/usr/bin/env restic check --verbose
+
+[Install]
+WantedBy=multi-user.target
