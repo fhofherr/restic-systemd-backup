@@ -38,7 +38,7 @@ ExecCondition=__PREFIX__/etc/restic-backup-systemd/scripts/check-snapshots
 ExecStart=/usr/bin/env restic backup \
     --verbose \
     --exclude-caches \
-    --tag %N \
+    --tag %I \
     --files-from __PREFIX__/etc/restic-backup-systemd/instances/%I/files
 
 [Install]
