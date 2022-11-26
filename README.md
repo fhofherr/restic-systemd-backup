@@ -16,12 +16,12 @@ required before first use.
 
 Templated systemd units provided by this repository assume that a
 directory containing further configuration exists under
-`$PREFIX/etc/restic-backup-systemd/%I/`.
+`$PREFIX/etc/restic-systemd-backup/%I/`.
 
 ### Prerequisites
 
 The following prerequisites must be met in order to use
-`restic-backup-systemd`:
+`restic-systemd-backup`:
 
 1. The `restic` binary must be installed on the system.
 2. A designated backup user must be created. By default this user is
@@ -29,7 +29,7 @@ The following prerequisites must be met in order to use
 
 ### Installation
 
-In order to install the files to `$PREFIX/etc/restic-backup-systemd/`
+In order to install the files to `$PREFIX/etc/restic-systemd-backup/`
 execute the following command:
 
     sudo make install
@@ -46,9 +46,9 @@ Filesystem level backups are provided by the
 service. In order to schedule regular filesystem level backups execute
 the following steps:
 
-1. Create a directory `$PREFIX/etc/restic-backup-systemd/<instance-name>`.
+1. Create a directory `$PREFIX/etc/restic-systemd-backup/<instance-name>`.
 2. Create the file
-   `$PREFIX/etc/restic-backup-systemd/<instance-name>/env` setting any
+   `$PREFIX/etc/restic-systemd-backup/<instance-name>/env` setting any
    environment variables used to configure `restic`. At the very minimum
    it must set `RESTIC_REPOSITORY` and `RESTIC_PASSWORD`. The [restic
    documentation](https://restic.readthedocs.io/en/stable/040_backup.html#environment-variables)
@@ -56,7 +56,7 @@ the following steps:
    contains `RESTIC_PASSWORD` it should be readable by the `restic` user
    only.
 3. Create the file
-   `$PREFIX/etc/restic-backup-systemd/<instance-name>/files` defining
+   `$PREFIX/etc/restic-systemd-backup/<instance-name>/files` defining
    which files and directories restic should backup. The [restic
    documentation](https://restic.readthedocs.io/en/stable/040_backup.html#including-files)
    for the `--files-from` flag explains the format of the file.

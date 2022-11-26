@@ -10,7 +10,7 @@ RESTIC_USER ?= restic
 RESTIC_GROUP ?= $(RESTIC_USER)
 
 SCRIPT_SOURCES := $(wildcard scripts/*)
-SCRIPT_DESTS := $(patsubst scripts/%,$(PREFIX)/etc/restic-backup-systemd/scripts/%,$(SCRIPT_SOURCES))
+SCRIPT_DESTS := $(patsubst scripts/%,$(PREFIX)/etc/restic-systemd-backup/scripts/%,$(SCRIPT_SOURCES))
 
 SERVICE_SOURCES := $(wildcard systemd/*.service)
 SERVICE_DESTS := $(patsubst systemd/%.service,/etc/systemd/system/%.service,$(SERVICE_SOURCES))
@@ -23,7 +23,7 @@ TIMER_DESTS := $(patsubst systemd/%.timer,/etc/systemd/system/%.timer,$(TIMER_SO
 install: $(SCRIPT_DESTS) $(SERVICE_DESTS) $(TIMER_DESTS)
 	systemctl daemon-reload
 
-$(PREFIX)/etc/restic-backup-systemd/scripts/%: scripts/%
+$(PREFIX)/etc/restic-systemd-backup/scripts/%: scripts/%
 	mkdir -p $(@D)
 	cp $< $@
 

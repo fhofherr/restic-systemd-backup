@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-: "${RESTIC_BACKUP_SYSTEMD_INSTANCES_DIR:=/usr/local/etc/restic-backup-systemd/instances}"
+: "${RESTIC_BACKUP_SYSTEMD_INSTANCES_DIR:=/usr/local/etc/restic-systemd-backup/instances}"
 
 set -eu -o pipefail
 
-# Name of the restic-backup-systemd systemd unit that failed.
+# Name of the restic-systemd-backup systemd unit that failed.
 #
 # Format: <service-name>@<instance-name>.service
 SYSTEMD_UNIT_NAME="${1:-}"
