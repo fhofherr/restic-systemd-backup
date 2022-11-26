@@ -4,7 +4,7 @@ set -u -o pipefail
 
 # Check if the restic repository configured using environment variables is
 # reachable and initialized.
-/usr/bin/env restic snapshots >/dev/null 2>&1
+/usr/bin/env restic snapshots --no-lock >/dev/null 2>&1
 ec=$?
 
 # If restic returned a zero exit code everything is fine and we are done.
