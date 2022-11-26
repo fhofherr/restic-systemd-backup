@@ -31,6 +31,7 @@ ExecCondition=__PREFIX__/etc/restic-backup-systemd/scripts/check-snapshots
 ExecStart=/usr/bin/env restic forget \
     --prune \
     --verbose \
+    --group-by host,tags \
     --keep-hourly 48 \
     --keep-daily 7 \
     --keep-weekly 5 \
