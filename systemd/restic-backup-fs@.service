@@ -26,6 +26,7 @@ OnFailure=restic-backup-failed@%n.service
 
 [Service]
 Type=oneshot
+KillMode=mixed
 User=__RESTIC_USER__
 Group=__RESTIC_GROUP__
 EnvironmentFile=__PREFIX__/etc/restic-backup-systemd/instances/%I/env
