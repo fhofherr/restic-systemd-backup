@@ -12,9 +12,9 @@
 
 
 [Unit]
-Description=Backup a postgresql database using the configuration in __PREFIX__/etc/restic-systemd-backup/instances/pg-dump-%I
+Description=Backup a postgresql database using the configuration in __PREFIX__/etc/restic-systemd-backup/instances/%I
 
-ConditionFileNotEmpty=__PREFIX__/etc/restic-systemd-backup/instances/pg-dump-%I/env
+ConditionFileNotEmpty=__PREFIX__/etc/restic-systemd-backup/instances/%I/env
 ConditionFileIsExecutable=__PREFIX__/etc/restic-systemd-backup/scripts/check-snapshots
 
 OnFailure=restic-backup-failed@%n.service
@@ -24,7 +24,7 @@ Type=oneshot
 KillMode=mixed
 User=__RESTIC_USER__
 Group=__RESTIC_GROUP__
-EnvironmentFile=__PREFIX__/etc/restic-systemd-backup/instances/pg-dump-%I/env
+EnvironmentFile=__PREFIX__/etc/restic-systemd-backup/instances/%I/env
 
 # Use the home directory of the restic user configured above.
 WorkingDirectory=~
