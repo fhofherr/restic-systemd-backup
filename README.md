@@ -48,7 +48,7 @@ the following steps:
 
 1. Create a directory `$PREFIX/etc/restic-systemd-backup/<instance-name>`.
 2. Create the file
-   `$PREFIX/etc/restic-systemd-backup/<instance-name>/env` setting any
+   `$PREFIX/etc/restic-systemd-backup/<instance-name>/restic` setting any
    environment variables used to configure `restic`. At the very minimum
    it must set `RESTIC_REPOSITORY` and `RESTIC_PASSWORD`. The [restic
    documentation](https://restic.readthedocs.io/en/stable/040_backup.html#environment-variables)
