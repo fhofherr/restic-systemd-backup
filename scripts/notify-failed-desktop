@@ -20,7 +20,7 @@ if ! command -v notify-send >/dev/null 2>&1; then
     exit 1
 fi
 
-NOTIFY_USER_UID="$(id -u fh)"
+NOTIFY_USER_UID="$(id -u "$NOTIFY_USER")"
 DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$NOTIFY_USER_UID/bus"
 DISPLAY=:0
 
