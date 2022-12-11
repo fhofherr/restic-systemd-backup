@@ -3,17 +3,16 @@
 : "${PG_DUMP:=/usr/bin/pg_dump}"
 : "${SUDO:=/usr/bin/sudo}"
 : "${POSTGRES_USER:=postgres}"
+: "${PG_DB_NAME:?"PG_DB_NAME not set"}"
 
 set -eu -o pipefail
 
-DB_NAME="${1:?"DB_NAME not set"}"
-
 dump() {
-    "$SUDO" --user="$POSTGRES_USER" "$PG_DUMP" --clean --if-exists "$DB_NAME"
+    "$SUDO" --user="$POSTGRES_USER" "$PG_DUMP" --clean --if-exists "$PG_DB_NAME"
 }
 
 backup() {
-    /usr/bin/env restic backup --tag "$DB_NAME" --stdin --stdin-filename "pg-dump-${DB_NAME}.sql"
+    /usr/bin/env restic backup --tag "$PG_DB_NAME" --stdin --stdin-filename "pg-dump-${PG_DB_NAME}.sql"
 }
 
 main() {

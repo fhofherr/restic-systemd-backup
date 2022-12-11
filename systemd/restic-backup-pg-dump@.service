@@ -5,9 +5,13 @@
 # in the `__PREFIX__/etc/restic-systemd-backup/instances/<instance-name>`
 # directory.
 #
-#    - `restic.env`: containing any environment variables required to configure restic.
-#      This file must include the environment variables to configure the restic
-#      repository location and the password for it.
+#    - `restic.env`: containing any environment variables required to configure
+#      restic. This file must include the environment variables to configure
+#      the restic repository location and the password for it.
+#      See: https://restic.readthedocs.io/en/stable/040_backup.html#environment-variables
+#    - `pg_dump.env`: containing any environment variables required to configure
+#      restic `pg_dump`. This file must at least include the PG_DB_NAME
+#      variable.
 #      See: https://restic.readthedocs.io/en/stable/040_backup.html#environment-variables
 
 
@@ -15,6 +19,7 @@
 Description=Backup a postgresql database using the configuration in __PREFIX__/etc/restic-systemd-backup/instances/%I
 
 ConditionFileNotEmpty=__PREFIX__/etc/restic-systemd-backup/instances/%I/restic.env
+ConditionFileNotEmpty=__PREFIX__/etc/restic-systemd-backup/instances/%I/pg_dump.env
 ConditionFileIsExecutable=__PREFIX__/etc/restic-systemd-backup/scripts/check-snapshots
 
 OnFailure=restic-backup-failed@%n.service
@@ -25,12 +30,13 @@ KillMode=mixed
 User=__RESTIC_USER__
 Group=__RESTIC_GROUP__
 EnvironmentFile=__PREFIX__/etc/restic-systemd-backup/instances/%I/restic.env
+EnvironmentFile=__PREFIX__/etc/restic-systemd-backup/instances/%I/pg_dump.env
 
 # Use the home directory of the restic user configured above.
 WorkingDirectory=~
 
 ExecCondition=__PREFIX__/etc/restic-systemd-backup/scripts/check-snapshots
-ExecStart=__PREFIX__/etc/restic-systemd-backup/scripts/pg-dump %I
+ExecStart=__PREFIX__/etc/restic-systemd-backup/scripts/pg-dump
 
 [Install]
 WantedBy=multi-user.target
