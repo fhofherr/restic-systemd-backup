@@ -16,7 +16,7 @@ Description=Remove old backups using the configuration in __PREFIX__/etc/restic-
 ConditionFileNotEmpty=__PREFIX__/etc/restic-systemd-backup/instances/%I/restic.env
 ConditionFileIsExecutable=__PREFIX__/etc/restic-systemd-backup/scripts/check-snapshots
 
-OnFailure=restic-backup-failed@%n.service
+OnFailure=restic-backup-failed@%n
 
 [Service]
 Type=oneshot

@@ -22,7 +22,7 @@ ConditionFileNotEmpty=__PREFIX__/etc/restic-systemd-backup/instances/%I/restic.e
 ConditionFileNotEmpty=__PREFIX__/etc/restic-systemd-backup/instances/%I/files
 ConditionFileIsExecutable=__PREFIX__/etc/restic-systemd-backup/scripts/check-snapshots
 
-OnFailure=restic-backup-failed@%n.service
+OnFailure=restic-backup-failed@%n
 
 [Service]
 Type=oneshot
