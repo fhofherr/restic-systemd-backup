@@ -14,7 +14,7 @@ fi
 
 # Otherwise print some information and exit with whatever exit code restic
 # returned.
-echo >&2 "Failed to list snapshots of restic repository."
+echo >&2 "Failed to list snapshots of restic repository: ${RESTIC_REPOSITORY:-}"
 echo >&2 "Is the repository location reachable and initialized?"
 
 exit $ec
