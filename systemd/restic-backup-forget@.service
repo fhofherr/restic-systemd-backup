@@ -24,6 +24,7 @@ KillMode=mixed
 User=${RESTIC_USER}
 Group=${RESTIC_GROUP}
 EnvironmentFile=${CONFIG_DIR}/%I/config.env
+AmbientCapabilities=CAP_DAC_READ_SEARCH
 
 # Use the home directory of the restic user configured above.
 WorkingDirectory=~
