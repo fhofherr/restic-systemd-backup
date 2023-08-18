@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+: "${PG_DUMP:=/usr/bin/pg_dump}"
+: "${RESTIC:=/usr/bin/restic}"
+
+set -eu -o pipefail
+
+dump() {
+    local pg_db_name
+
+    pg_db_name="$1"
+
+    "$PG_DUMP" --clean --if-exists "$pg_db_name"
+}
+
+backup() {
+    local pg_db_name
+
+    pg_db_name="$1"
+
+    "$RESTIC" backup --tag "pg-dump-${pg_db_name}" --stdin --stdin-filename "pg-dump-${pg_db_name}.sql"
+}
+
+main() {
+    local config_dir
+
+    config_dir="${1:}"
+    if [[ -z "$config_dir" ]]; then
+        echo "Usage:"
+        echo "$0 <config-dir>"
+        exit 2
+    fi
+
+    while IFS= read -r pg_db_name; do
+        dump "$pg_db_name" | backup "$pg_db_name"
+    done <"${config_dir}/pg_dbs"
+}
+
+main "$@"

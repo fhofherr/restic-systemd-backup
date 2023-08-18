@@ -16,7 +16,7 @@ required before first use.
 
 Templated systemd units provided by this repository assume that a
 directory containing further configuration exists under
-`$PREFIX/etc/restic-systemd-backup/%I/`.
+`$REPO_DIR/etc/restic-systemd-backup/%I/`.
 
 ### Prerequisites
 
@@ -29,15 +29,15 @@ The following prerequisites must be met in order to use
 
 ### Installation
 
-In order to install the files to `$PREFIX/etc/restic-systemd-backup/`
+In order to install the files to `$REPO_DIR/etc/restic-systemd-backup/`
 execute the following command:
 
     sudo make install
 
-The `PREFIX` defaults to `/usr/local`. In order to change prefix
+The `REPO_DIR` defaults to `/usr/local`. In order to change prefix
 execute:
 
-    sudo PREFIX="/somewhere/else" make install
+    sudo REPO_DIR="/somewhere/else" make install
 
 ### Filesystem backups
 
@@ -46,9 +46,9 @@ Filesystem level backups are provided by the
 service. In order to schedule regular filesystem level backups execute
 the following steps:
 
-1. Create a directory `$PREFIX/etc/restic-systemd-backup/<instance-name>`.
+1. Create a directory `$REPO_DIR/etc/restic-systemd-backup/<instance-name>`.
 2. Create the file
-   `$PREFIX/etc/restic-systemd-backup/<instance-name>/restic` setting any
+   `$REPO_DIR/etc/restic-systemd-backup/<instance-name>/restic` setting any
    environment variables used to configure `restic`. At the very minimum
    it must set `RESTIC_REPOSITORY` and `RESTIC_PASSWORD`. The [restic
    documentation](https://restic.readthedocs.io/en/stable/040_backup.html#environment-variables)
@@ -56,7 +56,7 @@ the following steps:
    contains `RESTIC_PASSWORD` it should be readable by the `restic` user
    only.
 3. Create the file
-   `$PREFIX/etc/restic-systemd-backup/<instance-name>/files` defining
+   `$REPO_DIR/etc/restic-systemd-backup/<instance-name>/files` defining
    which files and directories restic should backup. The [restic
    documentation](https://restic.readthedocs.io/en/stable/040_backup.html#including-files)
    for the `--files-from` flag explains the format of the file.
@@ -77,7 +77,7 @@ thing left to do is to enable and start the
 The [`restic-backup-failed@.service`] provides notifications in case one
 of the `restic-backup-*.service` units fails. In order to enable
 notifications for a instance create a directory
-`$PREFIX/etc/restic-with-systemd/<instance-name>/notify.d` and place one
+`$REPO_DIR/etc/restic-with-systemd/<instance-name>/notify.d` and place one
 or more executable files into it.
 
 See the `notify-failed-*` files in the [`scripts`](./scripts) directory

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-: "${RESTIC_BACKUP_SYSTEMD_INSTANCES_DIR:=/usr/local/etc/restic-systemd-backup/instances}"
+: "${CONFIG_DIR:=/etc/restic-systemd-backup}"
 
 set -eu -o pipefail
 
@@ -15,7 +15,7 @@ fi
 
 INSTANCE_NAME="${SYSTEMD_UNIT_NAME/#*@/}"
 INSTANCE_NAME="${INSTANCE_NAME/%.service/}"
-INSTANCE_DIR="$RESTIC_BACKUP_SYSTEMD_INSTANCES_DIR/$INSTANCE_NAME"
+INSTANCE_DIR="$CONFIG_DIR/$INSTANCE_NAME"
 
 if [[ ! -d "$INSTANCE_DIR" ]]; then
     echo >&2 "Instance directory not found: $INSTANCE_DIR"

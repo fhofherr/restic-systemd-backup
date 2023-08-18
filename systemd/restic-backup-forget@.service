@@ -2,33 +2,33 @@
 #
 # The unit is templated, which allows is it to be used with separate named
 # configs. After installing the unit the following files need to be created
-# in the `__PREFIX__/etc/restic-systemd-backup/instances/<instance-name>`
+# in the `${CONFIG_DIR}/<instance-name>`
 # directory.
 #
-#    - `restic.env`: containing any environment variables required to configure restic.
+#    - `config.env`: containing any environment variables required to configure restic.
 #      This file must include the environment variables to configure the restic
 #      repository location and the password for it.
 #      See: https://restic.readthedocs.io/en/stable/040_backup.html#environment-variables
 
 [Unit]
-Description=Remove old backups using the configuration in __PREFIX__/etc/restic-systemd-backup/instances/%I
+Description=Remove old backups using the configuration in ${CONFIG_DIR}/%I
 
-ConditionFileNotEmpty=__PREFIX__/etc/restic-systemd-backup/instances/%I/restic.env
-ConditionFileIsExecutable=__PREFIX__/etc/restic-systemd-backup/scripts/check-snapshots
+ConditionFileNotEmpty=${CONFIG_DIR}/%I/config.env
+ConditionFileIsExecutable=${REPO_DIR}/bash/check-snapshots
 
 OnFailure=restic-backup-failed@%n
 
 [Service]
 Type=oneshot
 KillMode=mixed
-User=__RESTIC_USER__
-Group=__RESTIC_GROUP__
-EnvironmentFile=__PREFIX__/etc/restic-systemd-backup/instances/%I/restic.env
+User=${RESTIC_USER}
+Group=${RESTIC_GROUP}
+EnvironmentFile=${CONFIG_DIR}/%I/config.env
 
 # Use the home directory of the restic user configured above.
 WorkingDirectory=~
 
-ExecCondition=__PREFIX__/etc/restic-systemd-backup/scripts/check-snapshots
+ExecCondition=${REPO_DIR}/bash/check-snapshots
 ExecStart=/usr/bin/env restic forget \
     --prune \
     --verbose \
