@@ -26,7 +26,7 @@ NOTIFICATIONS_DIR="$INSTANCE_DIR/notify.d"
 
 set -o allexport
 # shellcheck disable=SC1091
-source "$INSTANCE_DIR/notify.env"
+source "$INSTANCE_DIR/config.env"
 set +o allexport
 
 export SYSTEMD_UNIT_NAME
