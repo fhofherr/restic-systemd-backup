@@ -18,8 +18,8 @@
 [Unit]
 Description=Backup a postgresql database using the configuration in ${CONFIG_DIR}/%I
 
-# TODO read one or more database name from a file called "pg_dbs"
 ConditionFileNotEmpty=${CONFIG_DIR}/%I/config.env
+ConditionFileNotEmpty=${CONFIG_DIR}/%I/pg_dbs
 ConditionFileIsExecutable=${REPO_DIR}/bash/check-snapshots
 
 OnFailure=restic-backup-failed@%n
