@@ -24,7 +24,7 @@ backup() {
 main() {
     local config_dir
 
-    config_dir="${1:}"
+    config_dir="${1:-}"
     if [[ -z "$config_dir" ]]; then
         echo "Usage:"
         echo "$0 <config-dir>"
