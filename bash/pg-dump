@@ -18,7 +18,7 @@ backup() {
 
     pg_db_name="$1"
 
-    "$RESTIC" backup --tag "pg-dump-${pg_db_name}" --stdin --stdin-filename "pg-dump-${pg_db_name}.sql"
+    "$RESTIC" backup --tag "pg-dump__${pg_db_name}" --stdin --stdin-filename "pg-dump-${pg_db_name}.sql"
 }
 
 main() {
