@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 : "${PG_DUMP:=/usr/bin/pg_dump}"
+: "${PG_USER:=postgres}"
 : "${RESTIC:=/usr/bin/restic}"
+: "${SUDO:=/usr/bin/sudo}"
 
 set -eu -o pipefail
 
@@ -10,7 +12,7 @@ dump() {
 
     pg_db_name="$1"
 
-    "$PG_DUMP" --clean --if-exists "$pg_db_name"
+    "$SUDO" --user "$PG_USER" "$PG_DUMP" --clean --if-exists "$pg_db_name"
 }
 
 backup() {
